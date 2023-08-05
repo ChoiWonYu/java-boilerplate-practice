@@ -13,6 +13,16 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Board {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private Long id;
 
+  private String title;
+
+  private String content;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="member_id")
+  private Member member;
 
 }
