@@ -1,12 +1,9 @@
 package com.example.boilerplate.auth.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-//암호화, 복호화, 검증 로직
+//암호화, 복호화
 public class JwtProvider {
   private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; //1시간
 

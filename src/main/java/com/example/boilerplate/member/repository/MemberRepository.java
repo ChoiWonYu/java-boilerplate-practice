@@ -1,8 +1,10 @@
 package com.example.boilerplate.member.repository;
 
-import org.springframework.stereotype.Repository;
+import com.example.boilerplate.member.entity.Member;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member,Long> {
 
+  Optional<Member> findByEmail(String email);
 }
