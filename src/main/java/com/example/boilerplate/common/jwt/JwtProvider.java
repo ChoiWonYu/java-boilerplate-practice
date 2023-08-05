@@ -34,7 +34,7 @@ public class JwtProvider {
         .compact();
   }
 
-  public String getUserFormId(String token){
+  public String getPaylaod(String token){
     Jws<Claims> claim = parseClaims(token);
     return claim.getBody()
         .getSubject();

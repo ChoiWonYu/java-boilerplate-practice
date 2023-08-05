@@ -33,4 +33,11 @@ public class JwtAuthService implements AuthService{
 
     return accessToke;
   }
+
+  public Member findMemberByJwt(String token) {
+    String memberFormId = jwtProvider.getPaylaod(token);
+
+    return memberRepository.findByEmail(memberFormId)
+        .orElseThrow(null);
+  }
 }
