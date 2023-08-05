@@ -21,7 +21,7 @@ import org.springframework.util.PatternMatchUtils;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
 
-  private String[] whiteListURI=new String[]{};
+  private String[] whiteListURI=new String[]{"/auth/*"};
 
   private final JwtProvider jwtProvider;
 
@@ -38,7 +38,7 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
 
     String authorization = httpServletRequest.getHeader("Authorization");
 
-    if(!hasAuthorization(authorization)|!isBearerToken(authorization)){
+    if(!hasAuthorization(authorization)||!isBearerToken(authorization)){
       httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(),"토큰이 없습니다.");
       return;
     }
@@ -73,6 +73,7 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
   }
 
   private boolean checkWhiteList(String uri) {
+    log.info(uri);
     return PatternMatchUtils.simpleMatch(whiteListURI, uri);
   }
 
