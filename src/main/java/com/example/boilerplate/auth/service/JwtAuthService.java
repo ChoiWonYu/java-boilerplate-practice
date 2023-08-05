@@ -2,7 +2,7 @@ package com.example.boilerplate.auth.service;
 
 import com.example.boilerplate.auth.controller.dto.SigninRequest;
 import com.example.boilerplate.auth.controller.dto.SignupRequest;
-import com.example.boilerplate.auth.jwt.JwtProvider;
+import com.example.boilerplate.common.jwt.JwtProvider;
 import com.example.boilerplate.member.entity.Member;
 import com.example.boilerplate.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

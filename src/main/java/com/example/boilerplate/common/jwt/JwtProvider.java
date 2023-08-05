@@ -1,4 +1,4 @@
-package com.example.boilerplate.auth.jwt;
+package com.example.boilerplate.common.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

@@ -1,6 +1,6 @@
 package com.example.boilerplate.common.filter;
 
-import com.example.boilerplate.auth.jwt.JwtProvider;
+import com.example.boilerplate.common.jwt.JwtProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;

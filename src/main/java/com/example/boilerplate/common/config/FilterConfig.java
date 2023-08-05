@@ -1,8 +1,7 @@
 package com.example.boilerplate.common.config;
 
-import com.example.boilerplate.auth.jwt.JwtProvider;
+import com.example.boilerplate.common.jwt.JwtProvider;
 import com.example.boilerplate.common.filter.JwtAuthorizationFilter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
