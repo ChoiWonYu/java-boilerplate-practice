@@ -1,6 +1,10 @@
 package com.example.boilerplate.common.filter;
 
+import com.example.boilerplate.common.exception.ErrorCode;
+import com.example.boilerplate.common.exception.ErrorResponse;
 import com.example.boilerplate.common.jwt.JwtProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -15,6 +19,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.util.PatternMatchUtils;
 
 @Slf4j
@@ -39,7 +44,7 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
     String authorization = httpServletRequest.getHeader("Authorization");
 
     if(!hasAuthorization(authorization)||!isBearerToken(authorization)){
-      httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(),"토큰이 없습니다.");
+      setErrorResponse(httpServletResponse,ErrorCode.INVALID_TOKEN);
       return;
     }
 
@@ -47,18 +52,10 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
       String token=getToken(httpServletRequest);
       jwtProvider.parseClaims(token);
       chain.doFilter(request,response);
-    }catch (SignatureException | MalformedJwtException e) {
-      log.error("잘못된 JWT 서명입니다.");
-      httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "잘못된 JWT 서명입니다.");
+    }catch (SignatureException | MalformedJwtException |UnsupportedJwtException| IllegalArgumentException e) {
+      setErrorResponse(httpServletResponse,ErrorCode.INVALID_TOKEN);
     } catch (ExpiredJwtException e) {
-      log.error("만료된 JWT 토큰입니다.");
-      httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "토큰이 만료 되었습니다");
-    } catch (UnsupportedJwtException e) {
-      log.error("지원되지 않는 JWT 토큰입니다.");
-      httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "권한이 없습니다");
-    } catch (IllegalArgumentException e) {
-      log.error("JWT 토큰이 잘못되었습니다.");
-      httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "권한이 없습니다");
+      setErrorResponse(httpServletResponse,ErrorCode.EXPIRED_TOKEN);
     }
   }
 
@@ -70,6 +67,19 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
   @Override
   public boolean isBearerToken(String token) {
     return token.startsWith("Bearer ");
+  }
+
+  private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode){
+    ObjectMapper objectMapper=new ObjectMapper();
+    response.setStatus(errorCode.getStatus());
+    response.setContentType("application/json; charset=UTF-8");
+
+    ErrorResponse errorResponse=new ErrorResponse(errorCode);
+    try{
+      response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+    }catch(IOException e){
+      e.printStackTrace();
+    }
   }
 
   private boolean checkWhiteList(String uri) {
