@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(value = {CustomException.class})
   protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
     ErrorResponse response = new ErrorResponse(
-        ErrorCode.BAD_REQUEST); // CustomException에 ErrorCode Enum 반환
+        e.getErrorCode()); // CustomException에 ErrorCode Enum 반환
     return ResponseEntity.status(response.getStatus()).body(response);
   }
 

@@ -11,34 +11,35 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class ErrorResponse {
 
-  private String cause;
-
   private int status;
 
-  private List<FieldError> validation;
-
   private String code;
+
+  private String cause;
+
+  private List<FieldError> validation;
 
 
   @Getter
   @Setter
   @NoArgsConstructor
   public static class FieldError {
+
     private String field;
     private String message;
   }
 
-  public ErrorResponse(ErrorCode errorCode){
-    this.cause= errorCode.getCause();
-    this.status= errorCode.getStatus();
-    this.code= errorCode.getCode();
+  public ErrorResponse(ErrorCode errorCode) {
+    this.cause = errorCode.getCause();
+    this.status = errorCode.getStatus();
+    this.code = errorCode.getCode();
   }
 
-  public ErrorResponse(ErrorCode errorCode,List<FieldError> errors){
-    this.cause= errorCode.getCause();
-    this.status= errorCode.getStatus();
-    this.code= errorCode.getCode();
-    this.validation=errors;
+  public ErrorResponse(ErrorCode errorCode, List<FieldError> errors) {
+    this.cause = errorCode.getCause();
+    this.status = errorCode.getStatus();
+    this.code = errorCode.getCode();
+    this.validation = errors;
   }
 
 
