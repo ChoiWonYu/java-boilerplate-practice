@@ -2,11 +2,13 @@ package com.example.boilerplate.board.controller;
 
 import com.example.boilerplate.board.controller.dto.BoardCommonResponse;
 import com.example.boilerplate.board.controller.dto.BoardCreateRequest;
+import com.example.boilerplate.board.controller.dto.BoardPaginationDto;
 import com.example.boilerplate.board.controller.dto.BoardUpdateRequest;
 import com.example.boilerplate.board.entity.Board;
 import com.example.boilerplate.board.repository.BoardRepository;
 import com.example.boilerplate.board.service.BoardService;
 import com.example.boilerplate.common.annotation.TokenInfo;
+import com.example.boilerplate.common.response.PageResponse;
 import com.example.boilerplate.member.entity.Member;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -29,16 +31,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
 
   private final BoardService boardService;
-  private final BoardRepository boardRepository;
 
-  @GetMapping("")
-  public ResponseEntity<List<BoardCommonResponse>> getBoards() {
-    List<Board> allBoards = this.boardRepository.findAll();
-    List<BoardCommonResponse> boards=allBoards.stream().map(Board::toDto).toList();
-    return new ResponseEntity<>(boards, HttpStatus.OK);
+  //좀 더 복잡한 페이지네이션 구현해보기
+  @GetMapping
+  public ResponseEntity<PageResponse<BoardCommonResponse>> getBoards(BoardPaginationDto boardPaginationDto) {
+    PageResponse<BoardCommonResponse> boardsPageResponse = this.boardService.getBoards(boardPaginationDto);
+    return new ResponseEntity<>(boardsPageResponse,HttpStatus.OK);
   }
 
-  @PostMapping("")
+  @PostMapping
   public ResponseEntity<BoardCommonResponse> createBoard(
       @Valid @RequestBody BoardCreateRequest boardCreateRequest, @TokenInfo Member member) {
     BoardCommonResponse response = this.boardService.createBoard(boardCreateRequest,member);
