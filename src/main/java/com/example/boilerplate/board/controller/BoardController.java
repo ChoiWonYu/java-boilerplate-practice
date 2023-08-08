@@ -5,7 +5,9 @@ import com.example.boilerplate.board.repository.BoardRepository;
 import com.example.boilerplate.board.service.BoardService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,4 +22,5 @@ public class BoardController {
   public List<Board> getBoards(){
    return this.boardRepository.findAll();
   }
+
 }
