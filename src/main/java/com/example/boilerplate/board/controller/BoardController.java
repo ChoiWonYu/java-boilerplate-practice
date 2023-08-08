@@ -1,26 +1,61 @@
 package com.example.boilerplate.board.controller;
 
+import com.example.boilerplate.board.controller.dto.BoardCommonResponse;
+import com.example.boilerplate.board.controller.dto.BoardCreateRequest;
+import com.example.boilerplate.board.controller.dto.BoardUpdateRequest;
 import com.example.boilerplate.board.entity.Board;
 import com.example.boilerplate.board.repository.BoardRepository;
 import com.example.boilerplate.board.service.BoardService;
+import com.example.boilerplate.common.annotation.TokenInfo;
+import com.example.boilerplate.member.entity.Member;
+import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/boards")
 @RequiredArgsConstructor
 public class BoardController {
+
   private final BoardService boardService;
   private final BoardRepository boardRepository;
 
   @GetMapping("")
-  public List<Board> getBoards(){
-   return this.boardRepository.findAll();
+  public ResponseEntity<List<BoardCommonResponse>> getBoards() {
+    List<Board> allBoards = this.boardRepository.findAll();
+    List<BoardCommonResponse> boards=allBoards.stream().map(Board::toDto).toList();
+    return new ResponseEntity<>(boards, HttpStatus.OK);
   }
 
+  @PostMapping("")
+  public ResponseEntity<BoardCommonResponse> createBoard(
+      @Valid @RequestBody BoardCreateRequest boardCreateRequest, @TokenInfo Member member) {
+    BoardCommonResponse response = this.boardService.createBoard(boardCreateRequest,member);
+    return new ResponseEntity<>(response,HttpStatus.CREATED);
+  }
+
+  @PatchMapping("/{boardId}")
+  public ResponseEntity<BoardCommonResponse> updateBoard(
+      @Valid @RequestBody BoardUpdateRequest boardUpdateRequest, @PathVariable UUID boardId,
+      @TokenInfo Member member) {
+    BoardCommonResponse updatedBoard = this.boardService.updateBoard(boardId, boardUpdateRequest, member);
+    return new ResponseEntity<>(updatedBoard,HttpStatus.OK);
+  }
+
+  @DeleteMapping("/{boardId}")
+  public ResponseEntity<BoardCommonResponse> deleteBoard(@PathVariable UUID boardId, @TokenInfo Member member) {
+    BoardCommonResponse board = this.boardService.deleteBoard(boardId, member);
+    return new ResponseEntity<>(board,HttpStatus.OK);
+  }
 }
