@@ -31,7 +31,7 @@ public class Member {
 
   private String name;
 
-  @OneToMany(mappedBy = "member")
+  @OneToMany(mappedBy = "writer")
   private List<Board> boards=new ArrayList<>();
 
   @Builder

@@ -24,8 +24,12 @@ public class Board {
 
   private String content;
 
+  private String imageUrl;
+
+  private int views;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="member_id")
-  private Member member;
+  private Member writer;
 
 }
