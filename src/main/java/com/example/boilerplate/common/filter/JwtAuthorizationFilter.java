@@ -4,7 +4,6 @@ import com.example.boilerplate.common.exception.ErrorCode;
 import com.example.boilerplate.common.exception.ErrorResponse;
 import com.example.boilerplate.common.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -18,8 +17,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.util.PatternMatchUtils;
 
 @Slf4j
@@ -44,7 +41,7 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
     String authorization = httpServletRequest.getHeader("Authorization");
 
     if(!hasAuthorization(authorization)||!isBearerToken(authorization)){
-      setErrorResponse(httpServletResponse,ErrorCode.INVALID_TOKEN);
+      setErrorResponse(httpServletResponse,ErrorCode.UNAUTHENTICATED_USERS);
       return;
     }
 

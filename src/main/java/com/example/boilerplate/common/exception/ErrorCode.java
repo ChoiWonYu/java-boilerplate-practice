@@ -17,7 +17,7 @@ public enum ErrorCode {
   UNAUTHENTICATED_USERS(401, "UNAUTHORIZED","인증이 필요합니다."),
   EXPIRED_TOKEN(401,"UNAUTHORIZED","만료된 토큰입니다."),
   INVALID_TOKEN(401,"UNAUTHORIZED","잘못된 JWT 서명입니다."),
-
+  UNAUTHORIZED_USER(401,"UNAUTHORIZED","권한이 없습니다."),
 
   /* 403 FORBIDDEN : 접근권한 없음 */
   ACCESS_DENIED(403, "FORBIDDEN","접근이 거부되었습니다."),
@@ -25,6 +25,7 @@ public enum ErrorCode {
   /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
   MEMBER_NOT_FOUND(404, "NOT_FOUND","해당 유저 정보를 찾을 수 없습니다."),
   RESOURCE_NOT_FOUND(404, "NOT_FOUND","해당 정보를 찾을 수 없습니다."),
+  BOARD_NOT_FOUND(404,"NOT_FOUND","해당 게시물을 찾을 수 없습니다."),
 
   /* 405 METHOD_NOT_ALLOWED : 지원하지 않는 HTTP Method */
   METHOD_NOT_ALLOWED(405, "METHOD_NOT_ALLOWED","허용되지 않은 요청입니다."),
