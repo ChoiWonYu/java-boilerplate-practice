@@ -34,7 +34,8 @@ public enum ErrorCode {
   DUPLICATE_RESOURCE(409, "CONFLICT","데이터가 이미 존재합니다"),
 
   /* 500 INTERNAL_SERVER_ERROR */
-  SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "예기치 못한 오류가 발생하였습니다.");
+  SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "예기치 못한 오류가 발생하였습니다."),
+  IMAGE_UPLOAD_FAIL(500,"IMAGE_UPLOAD_FAIL","이미지 업로드에 실패했습니다.");
 
   private int status;
   private final String code;

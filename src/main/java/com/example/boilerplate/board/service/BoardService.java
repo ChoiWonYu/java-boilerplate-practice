@@ -1,5 +1,6 @@
 package com.example.boilerplate.board.service;
 
+import com.example.boilerplate.aws.s3.S3Service;
 import com.example.boilerplate.board.controller.dto.BoardCommonResponse;
 import com.example.boilerplate.board.controller.dto.BoardCreateRequest;
 import com.example.boilerplate.board.controller.dto.BoardPaginationDto;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
   private final BoardRepository boardRepository;
+  private final S3Service s3Service;
 
   @Transactional(readOnly = true)
   public PageResponse<BoardCommonResponse> getBoards(BoardPaginationDto boardPaginationDto) {
@@ -68,6 +71,12 @@ public class BoardService {
 
     return board.toDto();
   }
+
+  public String uploadImage(MultipartFile image) {
+    String imageUrl=s3Service.uploadFile(image);
+    return imageUrl;
+  }
+
 
   public BoardCommonResponse deleteBoard(UUID boardId, Member member) {
     Board board = boardRepository.findById(boardId)

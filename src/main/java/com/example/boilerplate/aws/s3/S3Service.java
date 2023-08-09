@@ -2,6 +2,8 @@ package com.example.boilerplate.aws.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.example.boilerplate.common.exception.CustomException;
+import com.example.boilerplate.common.exception.ErrorCode;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ public class S3Service {
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
 
-  public String uploadFile(MultipartFile multipartFile) throws IOException {
+  public String uploadFile(MultipartFile multipartFile) {
     StringBuilder sb = new StringBuilder();
     sb.append(UUID.randomUUID() + multipartFile.getOriginalFilename());
     String fileName = sb.toString();
@@ -27,7 +29,11 @@ public class S3Service {
     metaData.setContentLength(multipartFile.getSize());
     metaData.setContentType(multipartFile.getContentType());
 
-    amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metaData);
+    try {
+      amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metaData);
+    } catch (IOException e) {
+      throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAIL);
+    }
     return amazonS3.getUrl(bucket, fileName).toString();
   }
 

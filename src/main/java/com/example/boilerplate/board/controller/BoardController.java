@@ -4,14 +4,12 @@ import com.example.boilerplate.board.controller.dto.BoardCommonResponse;
 import com.example.boilerplate.board.controller.dto.BoardCreateRequest;
 import com.example.boilerplate.board.controller.dto.BoardPaginationDto;
 import com.example.boilerplate.board.controller.dto.BoardUpdateRequest;
-import com.example.boilerplate.board.entity.Board;
-import com.example.boilerplate.board.repository.BoardRepository;
+import com.example.boilerplate.board.controller.dto.ImageUploadResponseDto;
 import com.example.boilerplate.board.service.BoardService;
 import com.example.boilerplate.common.annotation.TokenInfo;
 import com.example.boilerplate.common.response.PageResponse;
 import com.example.boilerplate.member.entity.Member;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/boards")
@@ -43,6 +43,13 @@ public class BoardController {
   public ResponseEntity<BoardCommonResponse> createBoard(
       @Valid @RequestBody BoardCreateRequest boardCreateRequest, @TokenInfo Member member) {
     BoardCommonResponse response = this.boardService.createBoard(boardCreateRequest,member);
+    return new ResponseEntity<>(response,HttpStatus.CREATED);
+  }
+
+  @PostMapping("/image")
+  public ResponseEntity<ImageUploadResponseDto> uploadImage(@RequestParam(value = "image")MultipartFile image){
+    String imageUrl=boardService.uploadImage(image);
+    ImageUploadResponseDto response=new ImageUploadResponseDto(imageUrl);
     return new ResponseEntity<>(response,HttpStatus.CREATED);
   }
 
