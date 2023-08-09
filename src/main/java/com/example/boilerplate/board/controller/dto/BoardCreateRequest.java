@@ -18,11 +18,14 @@ public class BoardCreateRequest {
   @NotBlank(message="내용은 필수 입력값입니다.")
   private String content;
 
+  private String imageUrl;
+
   public Board toEntity(Member member){
     return Board.builder()
         .title(this.title)
         .content(this.content)
         .member(member)
+        .imageUrl(imageUrl)
         .build();
   }
 }

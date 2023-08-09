@@ -55,6 +55,13 @@ public class Board {
   public void updateBoard(BoardUpdateRequest boardUpdateRequest){
     this.title=boardUpdateRequest.getTitle();
     this.content=boardUpdateRequest.getContent();
+
+    if(boardUpdateRequest.getImageUrl()!=null){
+      this.imageUrl=boardUpdateRequest.getImageUrl();
+    }
+    else{
+      this.imageUrl=null;
+    }
   }
 
   public BoardCommonResponse toDto(){
@@ -64,6 +71,7 @@ public class Board {
         .title(title)
         .content(content)
         .createdAt(createdAt)
+        .imageUrl(imageUrl)
         .build();
   }
 

@@ -22,14 +22,17 @@ public class BoardCommonResponse {
 
   private String writer;
 
+  private String imageUrl;
+
   private LocalDateTime createdAt;
 
   @Builder
-  public BoardCommonResponse(UUID id,String title, String content, Member writer,LocalDateTime createdAt){
+  public BoardCommonResponse(UUID id,String title, String content, Member writer,LocalDateTime createdAt,String imageUrl){
     this.id=id;
     this.title=title;
     this.writer=writer.getName();
     this.content=content;
+    this.imageUrl=imageUrl;
     this.createdAt=createdAt;
   }
 }
