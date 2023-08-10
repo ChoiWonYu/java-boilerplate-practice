@@ -42,4 +42,10 @@ public class Comment {
   public CommentCommonResponseDto toDto() {
     return new CommentCommonResponseDto(board.getId(),content,commentWriter.getName());
   }
+
+  public static Comment createComment(String content,Member member,Board board){
+    Comment createdComment=new Comment(content,member,board);
+    board.getComments().add(createdComment);
+    return createdComment;
+  }
 }
