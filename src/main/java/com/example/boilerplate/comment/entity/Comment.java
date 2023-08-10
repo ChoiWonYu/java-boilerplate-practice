@@ -1,6 +1,7 @@
 package com.example.boilerplate.comment.entity;
 
 import com.example.boilerplate.board.entity.Board;
+import com.example.boilerplate.comment.controller.dto.CommentCommonResponseDto;
 import com.example.boilerplate.member.entity.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,5 +37,9 @@ public class Comment {
     this.content=content;
     this.commentWriter=member;
     this.board=board;
+  }
+
+  public CommentCommonResponseDto toDto(String content, Member member, Board board) {
+    return new CommentCommonResponseDto(board.getId(),content,member.getName());
   }
 }
