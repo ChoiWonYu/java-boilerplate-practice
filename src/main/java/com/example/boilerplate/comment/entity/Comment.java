@@ -2,7 +2,9 @@ package com.example.boilerplate.comment.entity;
 
 import com.example.boilerplate.board.entity.Board;
 import com.example.boilerplate.comment.controller.dto.CommentCommonResponseDto;
+import com.example.boilerplate.comment.controller.dto.CommentOwnerShipResponseDto;
 import com.example.boilerplate.member.entity.Member;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +31,7 @@ public class Comment {
   @JoinColumn(name = "board_id",nullable = false)
   private Board board;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "member_id",nullable = false)
   private Member commentWriter;
 
@@ -43,9 +45,11 @@ public class Comment {
     return new CommentCommonResponseDto(board.getId(),content,commentWriter.getName());
   }
 
-  public static Comment createComment(String content,Member member,Board board){
-    Comment createdComment=new Comment(content,member,board);
-    board.getComments().add(createdComment);
-    return createdComment;
+  public CommentOwnerShipResponseDto toOwnerShipDto(Member member) {
+    return new CommentOwnerShipResponseDto(board.getId(),content,commentWriter.getName(),commentWriter.equals(member));
+  }
+
+  public void addToBoard(Board board){
+    board.getComments().add(this);
   }
 }

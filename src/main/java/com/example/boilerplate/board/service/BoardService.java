@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
 
   private final BoardRepository boardRepository;
@@ -36,6 +37,13 @@ public class BoardService {
     List<BoardCommonResponse> results=paginationBoards.stream().map(Board::toDto).toList();
 
     return new PageResponse<>(results,boardPaginationDto.toPageInfo(paginationBoards));
+  }
+
+  @Transactional(readOnly = true)
+  public Board getBoardDetail(UUID boardId) {
+    Board board=boardRepository.findById(boardId)
+        .orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
+    return board;
   }
 
   public Board createBoard(BoardCreateRequest boardCreateRequest, Member member) {
@@ -97,9 +105,5 @@ public class BoardService {
         boardPaginationDto.getSize());
   }
 
-  public Board getBoardDetail(UUID boardId) {
-    Board board=boardRepository.findById(boardId)
-        .orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
-    return board;
-  }
+
 }

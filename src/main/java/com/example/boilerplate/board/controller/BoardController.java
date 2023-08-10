@@ -42,9 +42,9 @@ public class BoardController {
   }
 
   @GetMapping("/{boardId}")
-  public ResponseEntity<BoardCommonResponse> getBoardDetail(@PathVariable UUID boardId){
+  public ResponseEntity<BoardCommonResponse> getBoardDetail(@PathVariable UUID boardId,@TokenInfo Member member){
     Board board=this.boardService.getBoardDetail(boardId);
-    return new ResponseEntity(board.toDto(),HttpStatus.OK);
+    return new ResponseEntity(board.toDetailDto(member),HttpStatus.OK);
   }
 
   @PostMapping

@@ -1,7 +1,9 @@
 package com.example.boilerplate.board.entity;
 
 import com.example.boilerplate.board.controller.dto.BoardCommonResponse;
+import com.example.boilerplate.board.controller.dto.BoardDetailResonseDto;
 import com.example.boilerplate.board.controller.dto.BoardUpdateRequest;
+import com.example.boilerplate.comment.controller.dto.CommentOwnerShipResponseDto;
 import com.example.boilerplate.comment.entity.Comment;
 import com.example.boilerplate.member.entity.Member;
 import jakarta.persistence.Column;
@@ -46,11 +48,11 @@ public class Board {
   private int views;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="member_id")
+  @JoinColumn(name = "member_id")
   private Member writer;
 
   @OneToMany(mappedBy = "board")
-  private List<Comment> comments=new ArrayList<>();
+  private List<Comment> comments = new ArrayList<>();
 
   @CreatedDate
   @Column(updatable = false)
@@ -60,19 +62,18 @@ public class Board {
   private LocalDateTime updatedAt;
 
 
-  public void updateBoard(BoardUpdateRequest boardUpdateRequest){
-    this.title=boardUpdateRequest.getTitle();
-    this.content=boardUpdateRequest.getContent();
+  public void updateBoard(BoardUpdateRequest boardUpdateRequest) {
+    this.title = boardUpdateRequest.getTitle();
+    this.content = boardUpdateRequest.getContent();
 
-    if(boardUpdateRequest.getImageUrl()!=null){
-      this.imageUrl=boardUpdateRequest.getImageUrl();
-    }
-    else{
-      this.imageUrl=null;
+    if (boardUpdateRequest.getImageUrl() != null) {
+      this.imageUrl = boardUpdateRequest.getImageUrl();
+    } else {
+      this.imageUrl = null;
     }
   }
 
-  public BoardCommonResponse toDto(){
+  public BoardCommonResponse toDto() {
     return BoardCommonResponse.builder()
         .id(id)
         .writer(writer)
@@ -83,11 +84,28 @@ public class Board {
         .build();
   }
 
+  public BoardDetailResonseDto toDetailDto(Member member) {
+
+    List<CommentOwnerShipResponseDto> commentsList = comments.stream()
+        .map(comment -> comment.toOwnerShipDto(member)).toList();
+
+    return BoardDetailResonseDto.builder()
+        .id(id)
+        .writer(writer)
+        .title(title)
+        .content(content)
+        .createdAt(createdAt)
+        .imageUrl(imageUrl)
+        .comments(commentsList)
+        .isMine(member.getName().equals(writer.getName()))
+        .build();
+  }
+
   @Builder
-  public Board(String title,String content,String imageUrl,Member member){
-    this.title=title;
-    this.content=content;
-    this.imageUrl=imageUrl;
-    this.writer=member;
+  public Board(String title, String content, String imageUrl, Member member) {
+    this.title = title;
+    this.content = content;
+    this.imageUrl = imageUrl;
+    this.writer = member;
   }
 }
