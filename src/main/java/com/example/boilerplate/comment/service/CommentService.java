@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentService {
 
-
-
   public Comment createComment(UUID boardId, Member member, String content) {
 
   }
