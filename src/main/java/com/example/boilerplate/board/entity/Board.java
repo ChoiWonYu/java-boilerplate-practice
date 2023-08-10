@@ -2,6 +2,7 @@ package com.example.boilerplate.board.entity;
 
 import com.example.boilerplate.board.controller.dto.BoardCommonResponse;
 import com.example.boilerplate.board.controller.dto.BoardUpdateRequest;
+import com.example.boilerplate.comment.entity.Comment;
 import com.example.boilerplate.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +12,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +34,7 @@ public class Board {
   @Id
   @GeneratedValue
   @UuidGenerator
+  @Column(name = "board_id")
   private UUID id;
 
   private String title;
@@ -43,6 +48,9 @@ public class Board {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="member_id")
   private Member writer;
+
+  @OneToMany(mappedBy = "board")
+  private List<Comment> comments=new ArrayList<>();
 
   @CreatedDate
   @Column(updatable = false)
