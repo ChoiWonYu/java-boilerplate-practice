@@ -96,4 +96,10 @@ public class BoardService {
     return PageRequest.of(boardPaginationDto.getPage() - 1,
         boardPaginationDto.getSize());
   }
+
+  public Board getBoardDetail(UUID boardId) {
+    Board board=boardRepository.findById(boardId)
+        .orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
+    return board;
+  }
 }
