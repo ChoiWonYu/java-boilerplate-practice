@@ -39,7 +39,7 @@ public class Comment {
     this.board=board;
   }
 
-  public CommentCommonResponseDto toDto(String content, Member member, Board board) {
-    return new CommentCommonResponseDto(board.getId(),content,member.getName());
+  public CommentCommonResponseDto toDto() {
+    return new CommentCommonResponseDto(board.getId(),content,commentWriter.getName());
   }
 }
