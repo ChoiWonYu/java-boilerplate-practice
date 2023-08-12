@@ -48,9 +48,9 @@ jobs:
     steps:
       - name: pull image from docker hub
         run: |
-          sudo docker rm -f $(docker ps -qa)
+          sudo docker rm -f $(sudo docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{secrets.IMAGE_NAME}}
       - name: compose up spring application
         run: |
           sudo docker compose --env-file ~/.env up -f ~/docker-compose.yml -d --build
-          sudo docker image prune -f
+          sudo docker system prune -f
