@@ -11,9 +11,6 @@ db/
 ### env ###
 .env
 
-## config ##
-application-*.yml
-
 ### STS ###
 .apt_generated
 .classpath
